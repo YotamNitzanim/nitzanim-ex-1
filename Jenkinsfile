@@ -1,13 +1,11 @@
 /*Jenkinsfile (Declarative Pipeline)*/
 /* Requires the Docker Pipeline plugin */
 pipeline {
-    agent any
-    environment {
-        FLASK_APP = 'flaskr'
-        FLASK_ENV = 'development'
-    }
-    stages {
-        environment {
+  agent any
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '5'))
+  }
+  environment {
     DOCKERHUB_CREDENTIALS = credentials('dockerhub')
   }
   stages {
@@ -23,8 +21,16 @@ pipeline {
     }
     stage('Push') {
       steps {
-        sh 'docker push yotamnitzanim/nitzanim-ex-01'
+        sh 'docker push lyotamnitzanim/nitzanim-ex-01'
       }
+    }
+  }
+  post {
+    always {
+      sh 'docker logout'
+    }
+  }
+
         stage ('Deploy') {
         steps {
             sh 'sudo apt-get update'
