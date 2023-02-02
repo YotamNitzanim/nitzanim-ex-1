@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Push') {
             steps {
-                sh 'docker push lyotamnitzanim/nitzanim-ex-01'
+                sh 'docker push yotamnitzanim/nitzanim-ex-01'
             }
         }
         stage ('Deploy') {
