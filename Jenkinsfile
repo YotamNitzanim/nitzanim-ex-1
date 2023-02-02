@@ -7,11 +7,24 @@ pipeline {
         FLASK_ENV = 'development'
     }
     stages {
-        stage('build') {
-            steps {
-                sh 'ls'
-            }
-        }
+        environment {
+    DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+  }
+  stages {
+    stage('Build') {
+      steps {
+        sh 'docker build -t yotamnitzanim/nitzanim-ex-01 .'
+      }
+    }
+    stage('Login') {
+      steps {
+        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+      }
+    }
+    stage('Push') {
+      steps {
+        sh 'docker push yotamnitzanim/nitzanim-ex-01'
+      }
         stage ('Deploy') {
         steps {
             sh 'sudo apt-get update'
